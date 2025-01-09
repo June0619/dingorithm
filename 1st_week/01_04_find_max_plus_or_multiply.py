@@ -1,7 +1,6 @@
 def find_max_plus_or_multiply(array):
-
   tmp = array[0]
-  for i in range(1, len(array)):
+  for i in range(1, len(array)): # O(N)
     summary = tmp + array[i]
     multiply = tmp * array[i]
     if summary > multiply:
