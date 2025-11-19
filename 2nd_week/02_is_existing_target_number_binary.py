@@ -1,10 +1,10 @@
-finding_target = 14
+finding_target = 13
 finding_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 
 def is_existing_target_number_binary(target, array):
     idx = (len(array) -1) // 2
-
+    print(idx, array[idx], array)
     if not array:
         return False
 
@@ -14,7 +14,7 @@ def is_existing_target_number_binary(target, array):
     if array[idx] > target:
         return is_existing_target_number_binary(target, array[:idx])
     else:
-        return is_existing_target_number_binary(target, array[idx:])
+        return is_existing_target_number_binary(target, array[idx+1:])
 
 result = is_existing_target_number_binary(finding_target, finding_numbers)
 print(result)
