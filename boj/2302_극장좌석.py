@@ -11,20 +11,18 @@ fibo = build_fibo()
 def get_all_ways_of_theater_seat(total_count, fixed_seat_array):
     seat_arr = list(range(1, total_count + 1))
 
-    seat_split = []
-    temp = []
+    result = 1
+    fibo_count = 0
     for i in seat_arr:
         if i not in fixed_seat_array:
-            temp.append(i)
+            fibo_count += 1
         else:
-            seat_split.append(temp)
-            temp = []
+            if fibo_count != 0:
+                result *= fibo[fibo_count-1]
+                fibo_count = 0
     else:
-        seat_split.append(temp)
-
-    result = 1
-    for arr in seat_split:
-        result *= fibo[len(arr)-1]
+        if fibo_count != 0:
+            result *= fibo[fibo_count-1]
 
     return result
 
