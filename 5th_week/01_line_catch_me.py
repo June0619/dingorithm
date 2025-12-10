@@ -1,10 +1,7 @@
 from collections import deque
 
 def get_cur_ac(time):
-    result = 0
-    for n in range(1, time + 1):
-        result += n
-    return result
+    return time * (time + 1) // 2
 
 def catch_me(cony_loc, brown_loc):
 
