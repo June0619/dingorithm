@@ -7,6 +7,8 @@ def catch_me(cony_loc, brown_loc):
 
     location_queue = deque()
     location_queue.append((brown_loc, 0))
+    visited = [{} for _ in range(200001)]
+
     while True:
         cur_status = location_queue.popleft()
         cur_brown_loc = cur_status[0]
@@ -25,17 +27,20 @@ def catch_me(cony_loc, brown_loc):
         move_forward_loc = cur_brown_loc + 1
         move_twice_loc = cur_brown_loc * 2
 
-        if move_back_loc >= 0 and (move_back_loc, cur_time) not in location_queue:
+        if move_back_loc >= 0 and cur_time not in visited[move_back_loc]:
+            visited[move_back_loc][cur_time] = True
             location_queue.append((move_back_loc, cur_time))
 
-        if move_forward_loc <= 200_000 and (move_forward_loc, cur_time) not in location_queue:
+        if move_forward_loc <= 200_000 and cur_time not in visited[move_forward_loc]:
+            visited[move_forward_loc][cur_time] = True
             location_queue.append((move_forward_loc, cur_time))
 
-        if move_twice_loc <= 200_000 and (move_twice_loc, cur_time) not in location_queue:
+        if move_twice_loc <= 200_000 and cur_time not in visited[move_twice_loc]:
+            visited[move_twice_loc][cur_time] = True
             location_queue.append((move_twice_loc, cur_time))
 
 print(catch_me(11, 2))  # 5가 나와야 합니다!
-
 print("정답 = 3 / 현재 풀이 값 = ", catch_me(10,3))
 print("정답 = 8 / 현재 풀이 값 = ", catch_me(51,50))
 print("정답 = 28 / 현재 풀이 값 = ", catch_me(550,500))
+print("정답 = 4 / 현재 풀이 값 = ", catch_me(6,3))
