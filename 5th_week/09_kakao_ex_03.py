@@ -25,13 +25,8 @@ class LogInspector:
         if len(duration_arr) > 1:
             duration += duration_arr[1]
 
-        start_time = end_time - duration
+        start_time = end_time - duration + 1
 
-        start_time_arr = []
-        start_time_arr.append(start_time // (60 * 60 * 1000))
-        start_time -= start_time // (60 * 60 * 1000)
-        start_time_arr.append(start_time // (60 * 1000))
-
-        print(end_time, start_time, duration, start_time_arr)
+        print(end_time, start_time, duration)
 
 solution(lines)
