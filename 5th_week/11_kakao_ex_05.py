@@ -1,52 +1,53 @@
-def solution(info_arr, query_string_arr):
+from bisect import bisect_left
+from itertools import product
 
-    query_array = []
-    for query_string in query_string_arr:
-        query_array.append(Query(query_string))
 
-    result = [0] * len(query_array)
+def solution(p_info_array, p_query_array):
 
-    for info_str in info_arr:
-        info = Info(info_str)
+    #언어 직군 경력 푸드 조합 생성
+    all_category = [['cpp', 'java', 'python', '-'],['backend', 'frontend', '-'],['junior', 'senior', '-'],['chicken', 'pizza', '-']]
 
-        for i in range(len(query_array)):
-            q = query_array[i]
-            match = q.is_match(info)
-            if match:
-                result[i] += 1
+    all_scores = {}
+    for p in list(product(all_category[0], all_category[1], all_category[2], all_category[3])):
+        all_scores[' '.join(list(p))] = []
+
+    # info array 분해 후 채점
+    for info_string in p_info_array:
+        temp = info_string.split()
+        info_score = int(temp[4])
+        info_data = temp[:4]
+
+        info_category = [[item, '-'] for item in info_data]
+
+        for p in product(*info_category):
+            all_scores[' '.join(p)].append(info_score)
+
+    # 값이 있는 모든 배열 정렬
+    for key in all_scores.keys():
+        if all_scores[key]:
+            all_scores[key].sort()
+
+    result = []
+
+    for i in range(len(p_query_array)):
+        q = p_query_array[i].split()
+
+        query_condition = q[0] + ' ' + q[2] + ' ' + q[4] + ' ' + q[6]
+        query_score = int(q[7])
+
+        if query_condition in all_scores:
+            score_array = all_scores[query_condition]
+            if score_array:
+                idx = bisect_left(score_array, query_score)
+                result.append(len(score_array) - idx)
+            else:
+                result.append(0)
+        else:
+            result.append(0)
 
     return result
 
-class Info:
-    def __init__(self, info_str):
-        condition_array = info_str.split(' ')
-        self.language = condition_array[0]
-        self.type = condition_array[1]
-        self.grade = condition_array[2]
-        self.food = condition_array[3]
-        self.score = condition_array[4]
-
-    def __str__(self):
-        return self.language + ' ' + self.type + ' ' + self.grade + ' ' + self.food + ' ' + self.score
-
-class Query:
-    def __init__(self, query_str):
-        query_str = query_str.replace('and', '')
-        query_str = query_str.replace('  ', ' ')
-        condition_array = query_str.split(' ')
-        self.language = condition_array[0]
-        self.type = condition_array[1]
-        self.grade = condition_array[2]
-        self.food = condition_array[3]
-        self.score = condition_array[4]
-
-    def __str__(self):
-        return self.language + ' ' + self.type + ' ' + self.grade + ' ' + self.food + ' ' + self.score
-
-    def is_match(self, info):
-        result = (self.language == '-' or info.language == self.language)
-        result = result and ('-' == self.type or info.type == self.type)
-        result = result and ('-' == self.grade or info.grade == self.grade)
-        result = result and ('-' == self.food or info.food == self.food)
-        result = result and (int(info.score) >= int(self.score))
-        return result
+# info_array = ["java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50"]
+# query_array = ["java and backend and junior and pizza 100","python and frontend and senior and chicken 200","cpp and - and senior and pizza 250","- and backend and senior and - 150","- and - and - and chicken 100","- and - and - and - 150"]
+#
+# print(solution(info_array, query_array))
