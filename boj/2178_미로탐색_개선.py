@@ -22,6 +22,7 @@ def solution(n, m, miro):
     visited[0][0] = True
 
     while queue:
+        # 언패킹 사용
         y, x, score = queue.popleft()
 
         if x == m - 1 and y == n - 1:
