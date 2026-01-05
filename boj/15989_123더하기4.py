@@ -1,37 +1,27 @@
-import time
+# https://www.acmicpc.net/problem/15989
 
+# 탐색이 아니라 점화식 + DP 로 접근해야함
 
-# repeat = int(input())
+repeat = int(input())
 
-def solution(p_number):
+# limit = 101 # 100개정도 찍어보면서 점화식 진행 확인
+limit = 10001
+dp = [1] * limit  # 1. 1만 쓰는 경우로 초기화 (모든 수는 1로만 표현 가능하므로 기본 1가지)
+# print('step 1:', dp)
 
-    # 1, 2, 3 배열 초기화
-    visited = set()
-    # 숫자 초기화
-    n1, n2, n3 = p_number, 0, 0
-    stack = [(n1, n2, n3)]
-    visited.add((n1, n2, n3))
+# 2. 2를 쓰는 경우 추가
+for i in range(2, limit):
+    dp[i] += dp[i - 2]
+    # print('step 2:', i, dp)
 
-    while stack:
-        n1, n2, n3 = stack.pop()
+# 3. 3을 쓰는 경우 추가
+for i in range(3, limit):
+    dp[i] += dp[i - 3]
+    # print('step 3:', i, dp)
 
-        # 3 하나 나오는 경우
-        if n1 >= 3 and (n1 - 3, n2, n3 + 1) not in visited:
-            visited.add((n1 - 3, n2, n3 + 1))
-            stack.append((n1 - 3, n2, n3 + 1))
-        # 2 하나 나오는 경우
-        if n1 >= 2 and (n1 - 2, n2 + 1, n3) not in visited:
-            visited.add((n1 - 2, n2 + 1, n3))
-            stack.append((n1 - 2, n2 + 1, n3))
+def solution(dp, number):
+    print(dp[number])
+    pass
 
-    return len(visited)
-
-# for _ in range(repeat):
-#     solution(int(input()))
-start_time = time.time() # 시작 시간 기록
-for n in [10000]:
-    print(solution(n))
-end_time = time.time() # 종료 시간 기록
-
-# 소수점 5자리까지 출력 (초 단위)
-print(f"실행 시간: {end_time - start_time:.5f} sec")
+for _ in range(repeat):
+    solution(dp, int(input()))
